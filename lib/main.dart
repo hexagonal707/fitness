@@ -1,6 +1,6 @@
 import 'package:fitness/data/program_data.dart';
 import 'package:fitness/routes.dart';
-import 'package:fitness/screens/home/home_page.dart';
+import 'package:fitness/screens/program/program_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +35,7 @@ class _MainPageState extends State<MainPage> {
               colorSchemeSeed: Colors.blue,
               useMaterial3: true),
           routes: appRoutes,
-          home: const HomePage()),
+          home: const ProgramPage()),
     );
   }
 }

@@ -91,19 +91,6 @@ class ExerciseModalBottomSheet extends StatelessWidget {
                       const EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
                 ),
 
-                //Sets
-                CustomContainerTextField(
-                  onChanged: setsOnChanged,
-                  controller: setsTextEditingController,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  textInputAction: TextInputAction.next,
-                  labelText: 'Sets',
-                  padding:
-                      const EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
-                ),
-
                 //Reps
                 CustomContainerTextField(
                   onChanged: repsOnChanged,
@@ -117,6 +104,19 @@ class ExerciseModalBottomSheet extends StatelessWidget {
                     left: 20.0,
                     right: 20.0,
                   ),
+                ),
+
+                //Sets
+                CustomContainerTextField(
+                  onChanged: setsOnChanged,
+                  controller: setsTextEditingController,
+                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  keyboardType: TextInputType.number,
+                  textCapitalization: TextCapitalization.none,
+                  textInputAction: TextInputAction.next,
+                  labelText: 'Sets',
+                  padding:
+                      const EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
                 ),
 
                 //Save Button

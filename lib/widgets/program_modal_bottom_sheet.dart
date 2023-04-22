@@ -62,7 +62,7 @@ class ProgramModalBottomSheet extends StatelessWidget {
                   child: Row(
                     children: const <Widget>[
                       Text(
-                        'Add Exercise',
+                        'Add Program',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 24.0),
                       ),

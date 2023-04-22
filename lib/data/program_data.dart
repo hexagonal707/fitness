@@ -34,6 +34,25 @@ class ProgramData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteProgram(String programName) {
+    programList.removeWhere((program) => program.name == programName);
+    notifyListeners();
+  }
+
+  void deleteExercise(String programName, String exerciseName) {
+    Program relevantProgram = getRelevantProgram(programName);
+    relevantProgram.exercises
+        .removeWhere((exercise) => exercise.name == exerciseName);
+    notifyListeners();
+  }
+
+  void clearExercises(String programName) {
+    Program relevantProgram = getRelevantProgram(programName);
+    Program updatedProgram = relevantProgram.clearExercises();
+    programList[programList.indexOf(relevantProgram)] = updatedProgram;
+    notifyListeners();
+  }
+
   Program getRelevantProgram(String programName) {
     Program relevantProgram =
         programList.firstWhere((program) => program.name == programName);
