@@ -1,10 +1,13 @@
+import 'package:fitness/data/program_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'custom_container_textfield.dart';
+import 'custom_dropdown_button_formfield.dart';
 import 'custom_filled_button.dart';
 import 'custom_outlined_button.dart';
 
-class ExerciseModalBottomSheet extends StatelessWidget {
+class PredefinedExerciseModalBottomSheet extends StatelessWidget {
   final dynamic Function(String) exerciseNameOnChanged;
   final dynamic Function(String) setsOnChanged;
   final dynamic Function(String) repsOnChanged;
@@ -14,7 +17,8 @@ class ExerciseModalBottomSheet extends StatelessWidget {
   final void Function()? cancelFunction;
   final void Function()? saveFunction;
   final double height;
-  const ExerciseModalBottomSheet({
+  final void Function(Object?) onChanged;
+  const PredefinedExerciseModalBottomSheet({
     Key? key,
     required this.height,
     required this.exerciseNameOnChanged,
@@ -25,6 +29,7 @@ class ExerciseModalBottomSheet extends StatelessWidget {
     this.repsTextEditingController,
     this.cancelFunction,
     this.saveFunction,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -78,20 +83,32 @@ class ExerciseModalBottomSheet extends StatelessWidget {
                   ),
                 ),
 
-                //Name
-                CustomContainerTextField(
-                  onChanged: exerciseNameOnChanged,
-                  controller: exerciseNameTextEditingController,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  labelText: 'Name',
-                  padding:
-                      const EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
-                ),
-
-                //Reps
+                Consumer<ProgramData>(
+                  builder: (context, provider, child) {
+                    return CustomDropdownButtonFormField(
+                      labelText: 'Exercise',
+                      hintText: 'Select an Exercise',
+                      padding: EdgeInsets.only(
+                          top: 15.0,
+                          left: 20.0,
+                          right: MediaQuery.of(context).size.width * 0.35),
+                      value: null,
+                      items: provider
+                          .joinExerciseList()
+                          .map(
+                            (exercise) => DropdownMenuItem(
+                              onTap: () {
+                                exercise.name;
+                              },
+                              value: exercise.name,
+                              child: Text(exercise.name),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: onChanged,
+                    );
+                  },
+                ), //Reps
                 CustomContainerTextField(
                   onChanged: repsOnChanged,
                   controller: repsTextEditingController,

@@ -4,9 +4,64 @@ import 'package:flutter/cupertino.dart';
 
 class ProgramData extends ChangeNotifier {
   List<Program> programList = [];
-
   List<Program> getProgramList() {
     return programList;
+  }
+
+  List<Program> preProgramList = [
+    //Upper Body Program
+    Program(name: 'Upper Body', exercises: [
+      Exercise(name: 'Bench Press', reps: '8', sets: '4'),
+      Exercise(name: 'Shoulder Press', reps: '10', sets: '3'),
+      Exercise(name: 'Lat Pulldowns', reps: '12', sets: '3'),
+      Exercise(name: 'Bicep Curls', reps: '10', sets: '3'),
+      Exercise(name: 'Tricep Extensions', reps: '12', sets: '3'),
+      Exercise(name: 'Pushups', reps: '15', sets: '3'),
+      Exercise(name: 'Dumbbell Flyes', reps: '12', sets: '3'),
+      Exercise(name: 'Seated Cable Rows', reps: '10', sets: '3')
+    ]),
+
+    //Lower Body Program
+    Program(name: 'Lower Body', exercises: [
+      Exercise(name: 'Squats', reps: '12', sets: '4'),
+      Exercise(name: 'Deadlifts', reps: '5', sets: '3'),
+      Exercise(name: 'Leg Press', reps: '12', sets: '3'),
+      Exercise(name: 'Leg Curls', reps: '10', sets: '3'),
+      Exercise(name: 'Calf Raises', reps: '15', sets: '3'),
+      Exercise(name: 'Hip Thrusts', reps: '12', sets: '3'),
+      Exercise(name: 'Lunges', reps: '10', sets: '3'),
+      Exercise(name: 'Glute Bridges', reps: '15', sets: '3')
+    ]),
+
+    //Full Body Program
+    Program(name: 'Full Body', exercises: [
+      Exercise(name: 'Squats', reps: '12', sets: '3'),
+      Exercise(name: 'Bench Press', reps: '8', sets: '4'),
+      Exercise(name: 'Deadlifts', reps: '5', sets: '3'),
+      Exercise(name: 'Shoulder Press', reps: '10', sets: '3'),
+      Exercise(name: 'Lat Pulldowns', reps: '12', sets: '3'),
+      Exercise(name: 'Bicep Curls', reps: '10', sets: '3'),
+      Exercise(name: 'Tricep Extensions', reps: '12', sets: '3'),
+      Exercise(name: 'Plank', reps: '30 sec', sets: '3')
+    ]),
+  ];
+
+  List<Exercise> exerciseList = [];
+  List<Exercise> preExerciseList = [
+    Exercise(name: 'Squats', reps: '12', sets: '3'),
+    Exercise(name: 'Bench Press', reps: '8', sets: '4'),
+    Exercise(name: 'Deadlifts', reps: '5', sets: '3'),
+    Exercise(name: 'Shoulder Press', reps: '10', sets: '3'),
+    Exercise(name: 'Lat Pulldowns', reps: '12', sets: '3'),
+    Exercise(name: 'Bicep Curls', reps: '10', sets: '3'),
+    Exercise(name: 'Tricep Extensions', reps: '12', sets: '3'),
+  ];
+
+  List<Exercise> joinExerciseList() {
+    List<Exercise> combinedExerciseList = [];
+    combinedExerciseList.addAll(preExerciseList);
+    combinedExerciseList.addAll(exerciseList);
+    return combinedExerciseList;
   }
 
   int exercisesInWorkoutCount(String programName) {
@@ -19,12 +74,19 @@ class ProgramData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addCustomExercise(String exerciseName, String reps, String sets) {
+    Exercise customExercise =
+        Exercise(name: exerciseName, reps: reps, sets: sets);
+    exerciseList.add(customExercise);
+    notifyListeners();
+  }
+
   void addExercise(
-      String programName, String exerciseName, String sets, String reps) {
+      String programName, String exerciseName, String reps, String sets) {
     Program relevantProgram = getRelevantProgram(programName);
 
     relevantProgram.exercises
-        .add(Exercise(name: exerciseName, sets: sets, reps: reps));
+        .add(Exercise(name: exerciseName, reps: reps, sets: sets));
     notifyListeners();
   }
 
@@ -39,10 +101,18 @@ class ProgramData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteExercise(String programName, String exerciseName) {
+  void deleteExercise(String programName, String exerciseName, int index) {
     Program relevantProgram = getRelevantProgram(programName);
-    relevantProgram.exercises
-        .removeWhere((exercise) => exercise.name == exerciseName);
+    int indexToDelete = index;
+    for (int i = 0; i < relevantProgram.exercises.length; i++) {
+      if (relevantProgram.exercises[i].name == exerciseName) {
+        indexToDelete = index;
+        break;
+      }
+    }
+    if (indexToDelete != -1) {
+      relevantProgram.exercises.removeAt(indexToDelete);
+    }
     notifyListeners();
   }
 

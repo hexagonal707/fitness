@@ -1,5 +1,4 @@
 import 'package:fitness/data/program_data.dart';
-import 'package:fitness/models/program.dart';
 import 'package:fitness/widgets/exercise_card.dart';
 import 'package:fitness/widgets/exercise_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +19,9 @@ class _ExercisePageState extends State<ExercisePage> {
   final _exerciseNameController = TextEditingController();
   final _setsController = TextEditingController();
   final _repsController = TextEditingController();
-  final List<Program> programs = [];
 
   bool _isButtonActive = true;
+  bool isExpanded = false;
 
   void updateButtonActive() {
     final isButtonActive = _exerciseNameController.text.isNotEmpty;
@@ -34,24 +33,31 @@ class _ExercisePageState extends State<ExercisePage> {
     );
   }
 
-  void save() {
+  void saveExercise() {
     String programName = widget.programName;
     String newExerciseName = _exerciseNameController.text;
     String sets = _setsController.text;
     String reps = _repsController.text;
     Provider.of<ProgramData>(context, listen: false)
-        .addExercise(programName, newExerciseName, sets, reps);
+        .addExercise(programName, newExerciseName, reps, sets);
     Navigator.pop(context);
-    clear();
+    clearExercise();
   }
 
-  void cancel() {
+  void cancelExercise() {
     Navigator.pop(context);
-    clear();
+    clearExercise();
   }
 
-  void clear() {
+  void clearExercise() {
     _exerciseNameController.clear();
+    _repsController.clear();
+    _setsController.clear();
+  }
+
+  void onCheckboxChanged(String programName, String exerciseName) {
+    final provider = Provider.of<ProgramData>(context, listen: false);
+    provider.checkOffExercise(programName, exerciseName);
   }
 
   @override
@@ -65,10 +71,11 @@ class _ExercisePageState extends State<ExercisePage> {
 
   @override
   void dispose() {
+    _exerciseNameController.dispose();
+    _repsController.dispose();
+    _setsController.dispose();
     super.dispose();
   }
-
-  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +86,7 @@ class _ExercisePageState extends State<ExercisePage> {
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(60.0),
               child: Padding(
-                padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                padding: const EdgeInsets.only(right: 12.0, bottom: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -98,10 +105,10 @@ class _ExercisePageState extends State<ExercisePage> {
                               return ExerciseModalBottomSheet(
                                 height: 380.0,
                                 cancelFunction: () {
-                                  cancel();
+                                  cancelExercise();
                                 },
                                 saveFunction: () {
-                                  save();
+                                  saveExercise();
                                 },
                                 exerciseNameOnChanged: (value) {
                                   _exerciseNameController.text = value;
@@ -153,6 +160,9 @@ class _ExercisePageState extends State<ExercisePage> {
                         provider.programList[widget.index].exercises.length,
                     itemBuilder: (BuildContext context, int index) {
                       return ExerciseCard(
+                        onCheckBoxChanged: (value) {
+                          onCheckboxChanged;
+                        },
                         padding: const EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 16.0),
                         title: provider

@@ -6,6 +6,7 @@ class ExerciseCard extends StatelessWidget {
   final String title;
   final String label1;
   final String label2;
+  final void Function(bool) onCheckBoxChanged;
   const ExerciseCard({
     Key? key,
     this.padding = const EdgeInsets.all(0.0),
@@ -13,6 +14,7 @@ class ExerciseCard extends StatelessWidget {
     required this.title,
     required this.label1,
     required this.label2,
+    required this.onCheckBoxChanged,
   }) : super(key: key);
 
   @override
@@ -44,25 +46,31 @@ class ExerciseCard extends StatelessWidget {
                       height: 10.0,
                     ),
                     Row(
-                      children: <Widget>[
-                        Chip(
-                          shape: const StadiumBorder(),
-                          label: Text(
-                            label1,
-                            style: const TextStyle(
-                                fontSize: 12.0, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        Chip(
-                          shape: const StadiumBorder(),
-                          label: Text(
-                            label2,
-                            style: const TextStyle(
-                                fontSize: 12.0, fontWeight: FontWeight.w500),
-                          ),
+                      children: [
+                        Row(
+                          children: <Widget>[
+                            Chip(
+                              shape: const StadiumBorder(),
+                              label: Text(
+                                label1,
+                                style: const TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8.0,
+                            ),
+                            Chip(
+                              shape: const StadiumBorder(),
+                              label: Text(
+                                label2,
+                                style: const TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     )
