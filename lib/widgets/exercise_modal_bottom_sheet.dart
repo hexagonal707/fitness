@@ -70,7 +70,7 @@ class ExerciseModalBottomSheet extends StatelessWidget {
                   child: Row(
                     children: const <Widget>[
                       Text(
-                        'Add Exercise',
+                        'Add Custom Exercise',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 24.0),
                       ),

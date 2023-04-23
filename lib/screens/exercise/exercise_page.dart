@@ -1,8 +1,9 @@
 import 'package:fitness/data/program_data.dart';
 import 'package:fitness/widgets/exercise_card.dart';
-import 'package:fitness/widgets/exercise_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../widgets/predefined_exercise_modal_bottom_sheet.dart';
 
 class ExercisePage extends StatefulWidget {
   static const String id = 'program_page';
@@ -44,7 +45,7 @@ class _ExercisePageState extends State<ExercisePage> {
     clearExercise();
   }
 
-  void cancelExercise() {
+  void cancelExercise(context) {
     Navigator.pop(context);
     clearExercise();
   }
@@ -102,22 +103,42 @@ class _ExercisePageState extends State<ExercisePage> {
                             ),
                             context: context,
                             builder: (BuildContext context) {
-                              return ExerciseModalBottomSheet(
-                                height: 380.0,
+                              return PredefinedExerciseModalBottomSheet(
                                 cancelFunction: () {
-                                  cancelExercise();
+                                  cancelExercise(context);
                                 },
                                 saveFunction: () {
                                   saveExercise();
                                 },
+                                height: 380.0,
                                 exerciseNameOnChanged: (value) {
                                   _exerciseNameController.text = value;
+                                },
+                                repsOnChanged: (value) {
+                                  _repsController.text = value;
                                 },
                                 setsOnChanged: (value) {
                                   _setsController.text = value;
                                 },
-                                repsOnChanged: (value) {
-                                  _repsController.text = value;
+                                exerciseNameTextEditingController:
+                                    _exerciseNameController,
+                                repsTextEditingController: _repsController,
+                                setsTextEditingController: _setsController,
+                                onChanged: (value) {
+                                  final selectedExercise =
+                                      provider.joinExerciseList().firstWhere(
+                                            (exercise) =>
+                                                exercise.name == value,
+                                          );
+
+                                  setState(() {
+                                    _exerciseNameController.text =
+                                        selectedExercise.name;
+                                    _repsController.text =
+                                        selectedExercise.reps;
+                                    _setsController.text =
+                                        selectedExercise.sets;
+                                  });
                                 },
                               );
                             });
@@ -143,7 +164,7 @@ class _ExercisePageState extends State<ExercisePage> {
             title: Text(
               widget.programName,
               style:
-                  const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
+                  const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
             ),
           ),
           body: SafeArea(

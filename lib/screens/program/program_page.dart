@@ -112,9 +112,6 @@ class _ProgramPageState extends State<ProgramPage> {
     _exerciseNameController.addListener(updateButtonActive);
     _setsController.addListener(updateButtonActive);
     _repsController.addListener(updateButtonActive);
-    print(Provider.of<ProgramData>(context, listen: false)
-        .preExerciseList[1]
-        .reps);
   }
 
   @override
@@ -184,7 +181,7 @@ class _ProgramPageState extends State<ProgramPage> {
                             SizedBox(
                               width: 6.0,
                             ),
-                            Text('Exercise'),
+                            Text('Custom exercise'),
                           ],
                         ),
                       ),
@@ -202,7 +199,7 @@ class _ProgramPageState extends State<ProgramPage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return ProgramModalBottomSheet(
-                                  height: 240.0,
+                                  height: 236.0,
                                   cancelFunction: () {
                                     cancelProgram(context);
                                   },
@@ -235,8 +232,8 @@ class _ProgramPageState extends State<ProgramPage> {
             elevation: 0,
             automaticallyImplyLeading: false,
             title: const Text(
-              'Program Dashboard',
-              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
+              'Fitness App',
+              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
             ),
           ),
           body: SafeArea(
@@ -412,16 +409,11 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                           _setsController,
                                                                       onChanged:
                                                                           (value) {
-                                                                        print(provider
-                                                                            .preExerciseList);
                                                                         final selectedExercise = provider
                                                                             .joinExerciseList()
                                                                             .firstWhere(
                                                                               (exercise) => exercise.name == value,
                                                                             );
-
-                                                                        print(
-                                                                            selectedExercise);
 
                                                                         setState(
                                                                             () {
@@ -505,7 +497,6 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                               (value) {
                                                                             final selectedExercise =
                                                                                 provider.joinExerciseList().firstWhere((exercise) {
-                                                                              print(exercise.name);
                                                                               return exercise.name == value;
                                                                             });
 
@@ -533,6 +524,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                         itemBuilder:
                                                             (context, index) {
                                                           return Card(
+                                                            elevation: 0,
                                                             margin:
                                                                 const EdgeInsets
                                                                         .only(
@@ -542,10 +534,13 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                         .brightness ==
                                                                     Brightness
                                                                         .dark
-                                                                ? Colors.green
-                                                                    .shade600
-                                                                : Colors.green
-                                                                    .shade400,
+                                                                ? Colors
+                                                                    .blueGrey
+                                                                    .withOpacity(
+                                                                        0.1)
+                                                                : Colors.blue
+                                                                    .withOpacity(
+                                                                        0.1),
                                                             child: Padding(
                                                               padding: const EdgeInsets
                                                                       .symmetric(
@@ -560,7 +555,10 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                 children: <
                                                                     Widget>[
                                                                   Text(
-                                                                    '• ${program.exercises[index].name}',
+                                                                    program
+                                                                        .exercises[
+                                                                            index]
+                                                                        .name,
                                                                     style: const TextStyle(
                                                                         fontSize:
                                                                             16.0,
