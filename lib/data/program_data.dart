@@ -82,8 +82,8 @@ class ProgramData extends ChangeNotifier {
   }
 
   void addExercise(
-      String programName, String exerciseName, String reps, String sets) {
-    Program relevantProgram = getRelevantProgram(programName);
+      Program program, String exerciseName, String reps, String sets) {
+    Program relevantProgram = program;
 
     relevantProgram.exercises
         .add(Exercise(name: exerciseName, reps: reps, sets: sets));
@@ -96,22 +96,21 @@ class ProgramData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteProgram(String programName) {
-    programList.removeWhere((program) => program.name == programName);
+  void deleteProgram(Program program) {
+    programList.remove(program);
     notifyListeners();
   }
 
-  void deleteExercise(String programName, String exerciseName, int index) {
-    Program relevantProgram = getRelevantProgram(programName);
+  void deleteExercise(Program program, String exerciseName, int index) {
     int indexToDelete = index;
-    for (int i = 0; i < relevantProgram.exercises.length; i++) {
-      if (relevantProgram.exercises[i].name == exerciseName) {
-        indexToDelete = index;
+    for (int i = 0; i < program.exercises.length; i++) {
+      if (program.exercises[i].name == exerciseName) {
+        indexToDelete = i;
         break;
       }
     }
     if (indexToDelete != -1) {
-      relevantProgram.exercises.removeAt(indexToDelete);
+      program.exercises.removeAt(indexToDelete);
     }
     notifyListeners();
   }

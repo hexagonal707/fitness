@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:fitness/data/program_data.dart';
+import 'package:fitness/models/program.dart';
 import 'package:fitness/screens/exercise/exercise_page.dart';
 import 'package:fitness/widgets/custom_page_route_builder.dart';
 import 'package:fitness/widgets/exercise_modal_bottom_sheet.dart';
@@ -42,14 +43,8 @@ class _ProgramPageState extends State<ProgramPage> {
     clearProgram();
   }
 
-  void deleteProgram(int programIndex) {
-    String programName = Provider.of<ProgramData>(context, listen: false)
-        .programList[programIndex]
-        .name;
-
-    Provider.of<ProgramData>(context, listen: false)
-        .clearExercises(programName);
-    Provider.of<ProgramData>(context, listen: false).deleteProgram(programName);
+  void deleteProgram(Program program) {
+    Provider.of<ProgramData>(context, listen: false).deleteProgram(program);
   }
 
   void clearProgram() {
@@ -72,19 +67,18 @@ class _ProgramPageState extends State<ProgramPage> {
     clearExercise();
   }
 
-  void deleteExercise(String programName, String exerciseName, int index) {
+  void deleteExercise(Program program, String exerciseName, int index) {
     Provider.of<ProgramData>(context, listen: false)
-        .deleteExercise(programName, exerciseName, index);
+        .deleteExercise(program, exerciseName, index);
   }
 
-  void saveExercise(String programName) {
+  void saveExercise(Program program) {
     final provider = Provider.of<ProgramData>(context, listen: false);
-    String progName = programName;
+
     String newExerciseName = _exerciseNameController.text;
     String sets = _setsController.text;
     String reps = _repsController.text;
-    provider.addExercise(progName, newExerciseName, reps, sets);
-    provider.joinExerciseList();
+    provider.addExercise(program, newExerciseName, reps, sets);
     Navigator.pop(context);
     clearExercise();
   }
@@ -95,13 +89,6 @@ class _ProgramPageState extends State<ProgramPage> {
     provider.addCustomExercise(customExerciseName, customReps, customSets);
     Navigator.pop(context);
     clearExercise();
-  }
-
-  void fullBodyProgram() {
-    final provider = Provider.of<ProgramData>(context, listen: false);
-    provider.addExercise("Full Body Workout", "Squats", "3", "12");
-    provider.addExercise("Full Body Workout", "Deadlifts", "3", "10");
-    provider.addExercise("Full Body Workout", "Bench Press", "3", "8");
   }
 
   @override
@@ -281,7 +268,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                 context,
                                 CustomPageRouteBuilder(
                                     child: ExercisePage(
-                                      programName: program.name,
+                                      program: program,
                                       index: index,
                                     ),
                                     transitionType:
@@ -327,7 +314,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                             children: <Widget>[
                                               IconButton(
                                                 onPressed: () {
-                                                  deleteProgram(index);
+                                                  deleteProgram(program);
                                                 },
                                                 icon: Icon(
                                                   Icons.delete_outline_rounded,
@@ -391,7 +378,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                       saveFunction:
                                                                           () {
                                                                         saveExercise(
-                                                                            program.name);
+                                                                            program);
                                                                       },
                                                                       height:
                                                                           380.0,
@@ -477,7 +464,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                           },
                                                                           saveFunction:
                                                                               () {
-                                                                            saveExercise(program.name);
+                                                                            saveExercise(program);
                                                                           },
                                                                           height:
                                                                               380.0,
@@ -574,7 +561,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                         color: Colors.red.shade900,
                                                                         onPressed: () {
                                                                           deleteExercise(
-                                                                              program.name,
+                                                                              program,
                                                                               program.exercises[index].name,
                                                                               index);
                                                                         },

@@ -3,13 +3,14 @@ import 'package:fitness/widgets/exercise_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/program.dart';
 import '../../widgets/predefined_exercise_modal_bottom_sheet.dart';
 
 class ExercisePage extends StatefulWidget {
   static const String id = 'program_page';
-  final String programName;
+  final Program program;
   final int index;
-  const ExercisePage({Key? key, required this.programName, required this.index})
+  const ExercisePage({Key? key, required this.program, required this.index})
       : super(key: key);
 
   @override
@@ -35,12 +36,12 @@ class _ExercisePageState extends State<ExercisePage> {
   }
 
   void saveExercise() {
-    String programName = widget.programName;
+    Program program = widget.program;
     String newExerciseName = _exerciseNameController.text;
     String sets = _setsController.text;
     String reps = _repsController.text;
     Provider.of<ProgramData>(context, listen: false)
-        .addExercise(programName, newExerciseName, reps, sets);
+        .addExercise(program, newExerciseName, reps, sets);
     Navigator.pop(context);
     clearExercise();
   }
@@ -162,7 +163,7 @@ class _ExercisePageState extends State<ExercisePage> {
             scrolledUnderElevation: 0,
             backgroundColor: Theme.of(context).canvasColor,
             title: Text(
-              widget.programName,
+              widget.program.name,
               style:
                   const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
             ),
