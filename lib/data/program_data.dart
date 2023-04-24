@@ -8,6 +8,41 @@ class ProgramData extends ChangeNotifier {
     return programList;
   }
 
+  List<Exercise> joinExerciseList() {
+    List<Exercise> combinedExerciseList = [];
+    combinedExerciseList.addAll(preExerciseList);
+    combinedExerciseList.addAll(exerciseList);
+    return combinedExerciseList;
+  }
+
+  void addProgram(Program program) {
+    programList.add(
+        Program(name: program.name, exercises: List.from(program.exercises)));
+    notifyListeners();
+  }
+
+  void deleteProgram(Program program) {
+    programList.remove(program);
+    notifyListeners();
+  }
+
+  void addExercise(
+      Program program, String exerciseName, String reps, String sets) {
+    program.exercises.add(Exercise(name: exerciseName, reps: reps, sets: sets));
+    notifyListeners();
+  }
+
+  void checkOffExercise(Program program, List<Exercise> exercises, int index) {
+    Exercise relevantExercise = program.exercises[index];
+    relevantExercise.isCompleted = !relevantExercise.isCompleted;
+    notifyListeners();
+  }
+
+  void deleteExercise(program, int exerciseIndex) {
+    program.exercises.removeAt(exerciseIndex);
+    notifyListeners();
+  }
+
   List<Program> preProgramList = [
     //Upper Body Program
     Program(name: 'Upper Body', exercises: [
@@ -56,83 +91,4 @@ class ProgramData extends ChangeNotifier {
     Exercise(name: 'Bicep Curls', reps: '10', sets: '3'),
     Exercise(name: 'Tricep Extensions', reps: '12', sets: '3'),
   ];
-
-  List<Exercise> joinExerciseList() {
-    List<Exercise> combinedExerciseList = [];
-    combinedExerciseList.addAll(preExerciseList);
-    combinedExerciseList.addAll(exerciseList);
-    return combinedExerciseList;
-  }
-
-  int exercisesInWorkoutCount(String programName) {
-    Program relevantProgram = getRelevantProgram(programName);
-    return relevantProgram.exercises.length;
-  }
-
-  void addProgram(String name) {
-    programList.add(Program(name: name, exercises: []));
-    notifyListeners();
-  }
-
-  void addCustomExercise(String exerciseName, String reps, String sets) {
-    Exercise customExercise =
-        Exercise(name: exerciseName, reps: reps, sets: sets);
-    exerciseList.add(customExercise);
-    notifyListeners();
-  }
-
-  void addExercise(
-      Program program, String exerciseName, String reps, String sets) {
-    Program relevantProgram = program;
-
-    relevantProgram.exercises
-        .add(Exercise(name: exerciseName, reps: reps, sets: sets));
-    notifyListeners();
-  }
-
-  void checkOffExercise(String programName, String exerciseName) {
-    Exercise relevantExercise = getRelevantExercise(programName, exerciseName);
-    relevantExercise.isCompleted = !relevantExercise.isCompleted;
-    notifyListeners();
-  }
-
-  void deleteProgram(Program program) {
-    programList.remove(program);
-    notifyListeners();
-  }
-
-  void deleteExercise(Program program, String exerciseName, int index) {
-    int indexToDelete = index;
-    for (int i = 0; i < program.exercises.length; i++) {
-      if (program.exercises[i].name == exerciseName) {
-        indexToDelete = i;
-        break;
-      }
-    }
-    if (indexToDelete != -1) {
-      program.exercises.removeAt(indexToDelete);
-    }
-    notifyListeners();
-  }
-
-  void clearExercises(String programName) {
-    Program relevantProgram = getRelevantProgram(programName);
-    Program updatedProgram = relevantProgram.clearExercises();
-    programList[programList.indexOf(relevantProgram)] = updatedProgram;
-    notifyListeners();
-  }
-
-  Program getRelevantProgram(String programName) {
-    Program relevantProgram =
-        programList.firstWhere((program) => program.name == programName);
-    return relevantProgram;
-  }
-
-  Exercise getRelevantExercise(String programName, String exerciseName) {
-    Program relevantProgram = getRelevantProgram(programName);
-
-    Exercise relevantExercise = relevantProgram.exercises
-        .firstWhere((exercise) => exercise.name == exerciseName);
-    return relevantExercise;
-  }
 }

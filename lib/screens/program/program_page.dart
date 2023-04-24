@@ -1,11 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:fitness/data/program_data.dart';
+import 'package:fitness/models/exercise.dart';
 import 'package:fitness/models/program.dart';
 import 'package:fitness/screens/exercise/exercise_page.dart';
 import 'package:fitness/widgets/custom_page_route_builder.dart';
-import 'package:fitness/widgets/exercise_modal_bottom_sheet.dart';
 import 'package:fitness/widgets/predefined_exercise_modal_bottom_sheet.dart';
-import 'package:fitness/widgets/program_modal_bottom_sheet.dart';
+import 'package:fitness/widgets/predefined_program_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +22,7 @@ class _ProgramPageState extends State<ProgramPage> {
   late final _exerciseNameController = TextEditingController();
   late final _setsController = TextEditingController();
   late final _repsController = TextEditingController();
+  late Program _program;
 
   bool _isButtonActive = true;
   bool isExpanded = false;
@@ -36,11 +37,9 @@ class _ProgramPageState extends State<ProgramPage> {
     );
   }
 
-  void saveProgram() {
-    String newProgramName = _programNameController.text;
-    Provider.of<ProgramData>(context, listen: false).addProgram(newProgramName);
+  void saveProgram(Program program, List<Exercise> exercise) {
+    Provider.of<ProgramData>(context, listen: false).addProgram(program);
     Navigator.pop(context);
-    clearProgram();
   }
 
   void deleteProgram(Program program) {
@@ -67,11 +66,6 @@ class _ProgramPageState extends State<ProgramPage> {
     clearExercise();
   }
 
-  void deleteExercise(Program program, String exerciseName, int index) {
-    Provider.of<ProgramData>(context, listen: false)
-        .deleteExercise(program, exerciseName, index);
-  }
-
   void saveExercise(Program program) {
     final provider = Provider.of<ProgramData>(context, listen: false);
 
@@ -79,14 +73,6 @@ class _ProgramPageState extends State<ProgramPage> {
     String sets = _setsController.text;
     String reps = _repsController.text;
     provider.addExercise(program, newExerciseName, reps, sets);
-    Navigator.pop(context);
-    clearExercise();
-  }
-
-  void saveCustomExercise(
-      String customExerciseName, String customReps, String customSets) {
-    final provider = Provider.of<ProgramData>(context, listen: false);
-    provider.addCustomExercise(customExerciseName, customReps, customSets);
     Navigator.pop(context);
     clearExercise();
   }
@@ -123,7 +109,7 @@ class _ProgramPageState extends State<ProgramPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      FilledButton(
+                      /*FilledButton(
                         onPressed: () {
                           showModalBottomSheet(
                               isScrollControlled: true,
@@ -171,34 +157,9 @@ class _ProgramPageState extends State<ProgramPage> {
                             Text('Custom exercise'),
                           ],
                         ),
-                      ),
+                      ),*/
                       const SizedBox(width: 8.0),
                       FilledButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(28.0),
-                                  topRight: Radius.circular(28.0),
-                                ),
-                              ),
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ProgramModalBottomSheet(
-                                  height: 236.0,
-                                  cancelFunction: () {
-                                    cancelProgram(context);
-                                  },
-                                  saveFunction: () {
-                                    saveProgram();
-                                  },
-                                  programNameOnChanged: (value) {
-                                    _programNameController.text = value;
-                                  },
-                                );
-                              });
-                        },
                         child: Row(
                           children: const [
                             Icon(
@@ -210,6 +171,45 @@ class _ProgramPageState extends State<ProgramPage> {
                             Text('Program'),
                           ],
                         ),
+                        onPressed: () {
+                          provider.preProgramList;
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(28.0),
+                                  topRight: Radius.circular(28.0),
+                                ),
+                              ),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PredefinedProgramModalBottomSheet(
+                                  height: 236.0,
+                                  cancelFunction: () {
+                                    cancelProgram(context);
+                                  },
+                                  saveFunction: () {
+                                    saveProgram(_program, _program.exercises);
+                                  },
+                                  item: provider.preProgramList.map(
+                                    (program) {
+                                      provider.preProgramList;
+                                      return DropdownMenuItem(
+                                        onTap: () {
+                                          program.name;
+                                          setState(() {
+                                            _program = program;
+                                          });
+                                        },
+                                        value: program.name,
+                                        child: Text(program.name),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {},
+                                );
+                              });
+                        },
                       ),
                     ],
                   ),
@@ -370,6 +370,19 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                   builder:
                                                                       (context) {
                                                                     return PredefinedExerciseModalBottomSheet(
+                                                                      items: provider
+                                                                          .joinExerciseList()
+                                                                          .map(
+                                                                            (exercise) =>
+                                                                                DropdownMenuItem(
+                                                                              onTap: () {
+                                                                                exercise.name;
+                                                                              },
+                                                                              value: exercise.name,
+                                                                              child: Text(exercise.name),
+                                                                            ),
+                                                                          )
+                                                                          .toList(),
                                                                       cancelFunction:
                                                                           () {
                                                                         cancelExercise(
@@ -451,13 +464,25 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                     .green
                                                                     .shade900,
                                                                 onPressed: () {
-                                                                  clearExercise();
                                                                   showModalBottomSheet(
                                                                       context:
                                                                           context,
                                                                       builder:
                                                                           (context) {
                                                                         return PredefinedExerciseModalBottomSheet(
+                                                                          items: provider
+                                                                              .programList[index]
+                                                                              .exercises
+                                                                              .map(
+                                                                                (exercise) => DropdownMenuItem(
+                                                                                  onTap: () {
+                                                                                    exercise.name;
+                                                                                  },
+                                                                                  value: exercise.name,
+                                                                                  child: Text(exercise.name),
+                                                                                ),
+                                                                              )
+                                                                              .toList(),
                                                                           cancelFunction:
                                                                               () {
                                                                             cancelExercise(context);
@@ -503,13 +528,15 @@ class _ProgramPageState extends State<ProgramPage> {
                                                       ),
                                                     ),
                                                     ListView.builder(
-                                                        itemCount: program
-                                                            .exercises.length,
+                                                        itemCount: provider
+                                                            .programList[index]
+                                                            .exercises
+                                                            .length,
                                                         shrinkWrap: true,
                                                         physics:
                                                             const ClampingScrollPhysics(),
-                                                        itemBuilder:
-                                                            (context, index) {
+                                                        itemBuilder: (context,
+                                                            exerciseIndex) {
                                                           return Card(
                                                             elevation: 0,
                                                             margin:
@@ -544,7 +571,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                   Text(
                                                                     program
                                                                         .exercises[
-                                                                            index]
+                                                                            exerciseIndex]
                                                                         .name,
                                                                     style: const TextStyle(
                                                                         fontSize:
@@ -560,10 +587,9 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                     child: IconButton(
                                                                         color: Colors.red.shade900,
                                                                         onPressed: () {
-                                                                          deleteExercise(
+                                                                          provider.deleteExercise(
                                                                               program,
-                                                                              program.exercises[index].name,
-                                                                              index);
+                                                                              exerciseIndex);
                                                                         },
                                                                         icon: const Icon(Icons.delete_outline_rounded)),
                                                                   )

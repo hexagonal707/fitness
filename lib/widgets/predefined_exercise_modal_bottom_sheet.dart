@@ -14,6 +14,7 @@ class PredefinedExerciseModalBottomSheet extends StatelessWidget {
   final TextEditingController? exerciseNameTextEditingController;
   final TextEditingController? setsTextEditingController;
   final TextEditingController? repsTextEditingController;
+  final List<DropdownMenuItem<Object>>? items;
   final void Function()? cancelFunction;
   final void Function()? saveFunction;
   final double height;
@@ -21,6 +22,7 @@ class PredefinedExerciseModalBottomSheet extends StatelessWidget {
   const PredefinedExerciseModalBottomSheet({
     Key? key,
     required this.height,
+    required this.items,
     required this.exerciseNameOnChanged,
     required this.repsOnChanged,
     required this.setsOnChanged,
@@ -93,18 +95,7 @@ class PredefinedExerciseModalBottomSheet extends StatelessWidget {
                           left: 20.0,
                           right: MediaQuery.of(context).size.width * 0.35),
                       value: null,
-                      items: provider
-                          .joinExerciseList()
-                          .map(
-                            (exercise) => DropdownMenuItem(
-                              onTap: () {
-                                exercise.name;
-                              },
-                              value: exercise.name,
-                              child: Text(exercise.name),
-                            ),
-                          )
-                          .toList(),
+                      items: items,
                       onChanged: onChanged,
                     );
                   },
@@ -136,7 +127,7 @@ class PredefinedExerciseModalBottomSheet extends StatelessWidget {
                       const EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
                 ),
 
-                //Save Button
+                // Cancel Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -151,6 +142,8 @@ class PredefinedExerciseModalBottomSheet extends StatelessWidget {
                             fontWeight: FontWeight.w600, fontSize: 15.0),
                       ),
                     ),
+
+                    // Save Button
                     CustomFilledButton(
                       onPressed: saveFunction,
                       colorSchemeSeed: Colors.blue,

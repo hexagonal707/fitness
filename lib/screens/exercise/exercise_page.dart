@@ -57,10 +57,10 @@ class _ExercisePageState extends State<ExercisePage> {
     _setsController.clear();
   }
 
-  void onCheckboxChanged(String programName, String exerciseName) {
+  /*void onCheckboxChanged(Program program, Exercise exercise) {
     final provider = Provider.of<ProgramData>(context, listen: false);
-    provider.checkOffExercise(programName, exerciseName);
-  }
+    provider.checkOffExercise(program, widget.program.exercise[widget.index]);
+  }*/
 
   @override
   void initState() {
@@ -105,6 +105,18 @@ class _ExercisePageState extends State<ExercisePage> {
                             context: context,
                             builder: (BuildContext context) {
                               return PredefinedExerciseModalBottomSheet(
+                                items: provider
+                                    .preProgramList[widget.index].exercises
+                                    .map(
+                                      (exercise) => DropdownMenuItem(
+                                        onTap: () {
+                                          exercise.name;
+                                        },
+                                        value: exercise.name,
+                                        child: Text(exercise.name),
+                                      ),
+                                    )
+                                    .toList(),
                                 cancelFunction: () {
                                   cancelExercise(context);
                                 },
@@ -183,7 +195,7 @@ class _ExercisePageState extends State<ExercisePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return ExerciseCard(
                         onCheckBoxChanged: (value) {
-                          onCheckboxChanged;
+                          /*onCheckboxChanged;*/
                         },
                         padding: const EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 16.0),
