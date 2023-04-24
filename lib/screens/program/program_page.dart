@@ -371,7 +371,9 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                       (context) {
                                                                     return PredefinedExerciseModalBottomSheet(
                                                                       items: provider
-                                                                          .joinExerciseList()
+                                                                          .preProgramList[
+                                                                              index]
+                                                                          .exercises
                                                                           .map(
                                                                             (exercise) =>
                                                                                 DropdownMenuItem(
@@ -469,9 +471,11 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                           context,
                                                                       builder:
                                                                           (context) {
+                                                                        /*var exercises =
+                                                                            provider.getExercisesByProgramName(program.name);*/
                                                                         return PredefinedExerciseModalBottomSheet(
                                                                           items: provider
-                                                                              .programList[index]
+                                                                              .preProgramList[index]
                                                                               .exercises
                                                                               .map(
                                                                                 (exercise) => DropdownMenuItem(
@@ -508,7 +512,7 @@ class _ProgramPageState extends State<ProgramPage> {
                                                                           onChanged:
                                                                               (value) {
                                                                             final selectedExercise =
-                                                                                provider.joinExerciseList().firstWhere((exercise) {
+                                                                                provider.programList[index].exercises.firstWhere((exercise) {
                                                                               return exercise.name == value;
                                                                             });
 

@@ -43,6 +43,13 @@ class ProgramData extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Exercise>? getExercisesByProgramName(String programName) {
+    // Find the program object with the matching name
+    Program program =
+        preProgramList.firstWhere((program) => program.name == programName);
+    return program.exercises;
+  }
+
   List<Program> preProgramList = [
     //Upper Body Program
     Program(name: 'Upper Body', exercises: [
