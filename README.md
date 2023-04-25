@@ -1,16 +1,30 @@
-# fitness
+# Fitness App
 
-A new Flutter project.
+This is a fitness app that allows users to create workout programs and track their progress. Users can add exercises to their program and record their reps and sets for each exercise.
 
-## Getting Started
+## Technologies Used
 
-This project is a starting point for a Flutter application.
+- Flutter
+- Dart
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Clone the repository: `git clone https://github.com/hexagonal707/fitness.git`
+2. Navigate to the project directory: `cd fitness`
+3. Install dependencies: `flutter pub get`
+4. Run the app: `flutter run`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Running Tests
+
+1. Navigate to the project directory: `cd fitness`
+2. Run tests: `flutter test`
+
+## Demo
+
+View a live demo of the app [here](https://hexagonal707.github.io/fitness-website/).
+
+## Walkthrough Video
+
+Watch a walkthrough video of the app [here](https://www.loom.com/share/fc31a1997e814b7d9fd33c919d058314).
+
+### Made with ❤️ by Calvin Paiva
